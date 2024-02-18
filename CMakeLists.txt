@@ -10,7 +10,12 @@ enable_testing()
 find_package(rmqcpp REQUIRED)
 find_package(bsl REQUIRED)
 
-add_executable(ProcessManager main.cpp config.cpp)
+add_executable(ProcessManager 
+        main.cpp
+        config.cpp
+        connection.cpp
+        producer.cpp
+        )
 target_link_libraries(ProcessManager PUBLIC 
     rmqcpp::rmq
     bsl
