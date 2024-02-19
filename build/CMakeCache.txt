@@ -17,6 +17,9 @@
 //Build the testing tree.
 BUILD_TESTING:BOOL=ON
 
+//Path to a file.
+Boost_INCLUDE_DIR:PATH=/home/abs/vcpkg/vcpkg/installed/x64-linux/include
+
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 
@@ -329,6 +332,9 @@ ProcessManager_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 ProcessManager_SOURCE_DIR:STATIC=/home/abs/processManager
 
+//The directory containing a CMake configuration file for REQUIRED.
+REQUIRED_DIR:PATH=REQUIRED_DIR-NOTFOUND
+
 //Name of the computer/site where compile is being run
 SITE:STRING=LAPTOP-9DVDL2IH
 
@@ -393,6 +399,12 @@ bal_DIR:PATH=/home/abs/vcpkg/vcpkg/installed/x64-linux/share/bal
 //The directory containing a CMake configuration file for bdl.
 bdl_DIR:PATH=/home/abs/vcpkg/vcpkg/installed/x64-linux/share/bdl
 
+//The directory containing a CMake configuration file for boost:x64-linux@1.84.0.
+"boost:x64-linux@1.84.0_DIR":PATH=boost:x64-linux@1.84.0_DIR-NOTFOUND
+
+//The directory containing a CMake configuration file for boost.
+boost_DIR:PATH=boost_DIR-NOTFOUND
+
 //The directory containing a CMake configuration file for bsl.
 bsl_DIR:PATH=/home/abs/vcpkg/vcpkg/installed/x64-linux/share/bsl
 
@@ -425,6 +437,8 @@ ryu_DIR:PATH=/home/abs/vcpkg/vcpkg/installed/x64-linux/share/ryu
 # INTERNAL cache entries
 ########################
 
+//ADVANCED property for variable: Boost_INCLUDE_DIR
+Boost_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_ADDR2LINE
 CMAKE_ADDR2LINE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
@@ -612,6 +626,8 @@ CTEST_SUBMIT_RETRY_COUNT-ADVANCED:INTERNAL=1
 CTEST_SUBMIT_RETRY_DELAY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: DART_TESTING_TIMEOUT
 DART_TESTING_TIMEOUT-ADVANCED:INTERNAL=1
+//Details about finding Boost
+FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[/home/abs/vcpkg/vcpkg/installed/x64-linux/include][c ][v1.84.0()]
 //Details about finding OpenSSL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenSSL:INTERNAL=[/home/abs/vcpkg/vcpkg/installed/x64-linux/debug/lib/libcrypto.a][/home/abs/vcpkg/vcpkg/installed/x64-linux/include][c ][v3.2.1()]
 //Details about finding Threads
@@ -650,6 +666,18 @@ ZLIB_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 Z_VCPKG_CHECK_MANIFEST_MODE:INTERNAL=OFF
 //Vcpkg root directory
 Z_VCPKG_ROOT_DIR:INTERNAL=/home/abs/vcpkg/vcpkg
+//Last used Boost_COMPILER value.
+_Boost_COMPILER_LAST:INTERNAL=-vc140
+//Components requested for this build tree.
+_Boost_COMPONENTS_SEARCHED:INTERNAL=
+//Last used Boost_INCLUDE_DIR value.
+_Boost_INCLUDE_DIR_LAST:INTERNAL=/home/abs/vcpkg/vcpkg/installed/x64-linux/include
+//Last used Boost_NAMESPACE value.
+_Boost_NAMESPACE_LAST:INTERNAL=boost
+//Last used Boost_USE_MULTITHREADED value.
+_Boost_USE_MULTITHREADED_LAST:INTERNAL=ON
+//Last used Boost_USE_STATIC_LIBS value.
+_Boost_USE_STATIC_LIBS_LAST:INTERNAL=OFF
 //linker supports push/pop state
 _CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED:INTERNAL=TRUE
 _OPENSSL_CFLAGS:INTERNAL=-I/home/abs/vcpkg/vcpkg/installed/x64-linux/debug/lib/pkgconfig/../../../include

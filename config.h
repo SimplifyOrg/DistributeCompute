@@ -14,6 +14,6 @@ private:
 public:
     config(/* args */);
     ~config();
-    bool readConfigFile(std::filesystem::path & configPath);
-    std::string get(std::string key);
+    bool readConfigFile(const std::filesystem::path &configPath);
+    std::string get(const std::string &key);
 };

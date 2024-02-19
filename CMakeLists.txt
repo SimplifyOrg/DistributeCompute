@@ -9,6 +9,7 @@ include(CTest)
 enable_testing()
 find_package(rmqcpp REQUIRED)
 find_package(bsl REQUIRED)
+find_package(Boost REQUIRED)
 
 add_executable(ProcessManager 
         main.cpp

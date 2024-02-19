@@ -22,7 +22,7 @@ config::~config()
     m_configObject.release();
 }
 
-bool config::readConfigFile(std::filesystem::path & configPath)
+bool config::readConfigFile(const std::filesystem::path & configPath)
 {
     if(configPath.empty())
     {
@@ -38,7 +38,7 @@ bool config::readConfigFile(std::filesystem::path & configPath)
     return true;
 }
 
-std::string config::get(std::string key)
+std::string config::get(const std::string &key)
 {
     if(!validateKey(key))
     {
