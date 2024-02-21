@@ -5,7 +5,6 @@
 #include <rmqt_simpleendpoint.h>
 #include <bsl_memory.h>
 #include <rmqt_plaincredentials.h>
-#include <memory>
 #include <bsl_string.h>
 #include "config.h"
 
@@ -18,7 +17,7 @@ private:
     std::unique_ptr<rmqa::RabbitContext> m_rabbitContext;
     bsl::shared_ptr<rmqt::SimpleEndpoint> m_amqpEndPoint;
     bsl::shared_ptr<rmqt::PlainCredentials> m_amqpCredentials;
-    std::shared_ptr<config> m_config;
+    bsl::shared_ptr<config> m_config;
     bsl::shared_ptr<rmqa::VHost> m_vhost;
 public:
     connection(config* pConfig);
@@ -27,5 +26,7 @@ public:
     bool createConnection();
 
     bsl::shared_ptr<rmqa::VHost> getVhost() { return m_vhost; }
+
+    bsl::shared_ptr<config> getConfig() { return m_config; }
 
 };

@@ -12,7 +12,7 @@ static boost::uuids::uuid GenerateUUID()
 
 connection::connection(config* pConfig)
 {
-    m_config.reset(std::move(pConfig));
+    m_config.reset(pConfig);
     m_rabbitContext = std::make_unique<rmqa::RabbitContext>();
     uint16_t port = std::atoi(m_config->get("port").c_str());
     m_amqpEndPoint = bsl::make_shared<rmqt::SimpleEndpoint>(m_config->get("host"), 
