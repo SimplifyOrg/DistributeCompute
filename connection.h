@@ -6,7 +6,7 @@
 #include <bsl_memory.h>
 #include <rmqt_plaincredentials.h>
 #include <memory>
-#include <string>
+#include <bsl_string.h>
 #include "config.h"
 
 using namespace BloombergLP;
@@ -19,10 +19,13 @@ private:
     bsl::shared_ptr<rmqt::SimpleEndpoint> m_amqpEndPoint;
     bsl::shared_ptr<rmqt::PlainCredentials> m_amqpCredentials;
     std::shared_ptr<config> m_config;
+    bsl::shared_ptr<rmqa::VHost> m_vhost;
 public:
     connection(config* pConfig);
     ~connection();
 
-    void createConnection();
+    bool createConnection();
+
+    bsl::shared_ptr<rmqa::VHost> getVhost() { return m_vhost; }
 
 };

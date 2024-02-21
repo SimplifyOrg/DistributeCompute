@@ -1,10 +1,11 @@
 #pragma once
 #include <filesystem>
 #include <memory>
-#include <string>
+#include <bsl_string.h>
 #include "json.hpp"
 
 using namespace nlohmann;
+using namespace BloombergLP;
 
 class config
 {
@@ -15,5 +16,5 @@ public:
     config(/* args */);
     ~config();
     bool readConfigFile(const std::filesystem::path &configPath);
-    std::string get(const std::string &key);
+    bsl::string get(const bsl::string &key);
 };

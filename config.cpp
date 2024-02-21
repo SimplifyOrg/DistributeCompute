@@ -1,9 +1,8 @@
 #include "config.h"
-
 #include <fstream>
 #include <iostream>
 
-static bool validateKey(const std::string &key)
+static bool validateKey(const bsl::string &key)
 {
     if(key.empty())
     {
@@ -38,18 +37,18 @@ bool config::readConfigFile(const std::filesystem::path & configPath)
     return true;
 }
 
-std::string config::get(const std::string &key)
+bsl::string config::get(const bsl::string &key)
 {
     if(!validateKey(key))
     {
-        return std::string();
+        return bsl::string();
     }
 
     if(!m_configObject->contains(key.c_str()))
     {
         std::cerr << "Key not present in the config" << std::endl;
-        return std::string();
+        return bsl::string();
     }
     auto value = m_configObject->at(key);
-    return std::string(value.dump().c_str());
+    return bsl::string(value.dump().c_str());
 }
