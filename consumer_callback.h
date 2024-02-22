@@ -1,6 +1,6 @@
 #pragma once
 
-#include <rmqa_consumer.h>
+#include <rmqa_message.h>
 
 using namespace BloombergLP;
 
