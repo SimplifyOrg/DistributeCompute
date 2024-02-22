@@ -1,7 +1,7 @@
 #pragma once
 
 #include <rmqt_result.h>
-#include <rmqp_producer.h>
+#include <rmqa_producer.h>
 #include "connection.h"
 #include <bsl_memory.h>
 #include <functional>
