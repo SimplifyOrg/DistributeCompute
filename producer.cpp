@@ -3,6 +3,25 @@
 #include <rmqa_producer.h>
 #include "config.h"
 
+namespace ProcessManager
+{
+    void receiveConfirmation(const rmqt::Message& message,
+                         const bsl::string& routingKey,
+                         const rmqt::ConfirmResponse& response)
+    {
+        if (response.status() == rmqt::ConfirmResponse::ACK) 
+        {
+            std::cout << "Message received by broker: " << message << std::endl;
+        }
+        else
+        {
+            // REJECT / RETURN indicate problem with the send request (bad routing
+            // key?)
+            std::cerr << "Message cannot be routed properly. Maybe the routing key \"" << routingKey << "\" is bad" << std::endl;
+        }
+    }
+}
+
 ProcessManager::producer::producer(connection* pConnection)
 {
     m_connection.reset(pConnection);
@@ -30,7 +49,7 @@ bool ProcessManager::producer::createProducer()
         if (!producerResult) 
         {
             // handle errors.
-            std::cerr << "Error creating connection: " << producerResult.error();
+            std::cerr << "Error creating connection: " << producerResult.error() << std::endl;
             return false;
         }
         m_producer = producerResult.value();
@@ -42,4 +61,35 @@ bool ProcessManager::producer::createProducer()
     }
     
     return true;
+}
+
+void ProcessManager::producer::sendMessage(bsl::string & message, 
+                                        void(*brokerAckCallback)(const rmqt::Message& message, 
+                                                                const bsl::string& routingKey, 
+                                                                const rmqt::ConfirmResponse& response) = &ProcessManager::receiveConfirmation)
+{
+    auto config = m_connection->getConfig();
+    bsl::string key = config->get("RoutingKey");
+    if(key.empty())
+    {
+        std::cerr << "Routing key not found" << '\n';
+    }
+    
+    if(!message.empty())
+    {
+        rmqt::Message messageToSend(
+                    bsl::make_shared<bsl::vector<uint8_t> >(message.cbegin(), message.cend()));
+        const rmqp::Producer::SendStatus sendResult =
+            m_producer->send(messageToSend, config->get("RoutingKey"), brokerAckCallback);
+
+        if (sendResult != rmqp::Producer::SENDING) {
+            // Unable to enqueue this send
+            std::cerr << "Unable to enqueue this message: " << message << '\n';
+            return;
+        }
+    }
+    else
+    {
+        std::cerr << "Aborted sending empty message." << '\n';
+    }
 }
