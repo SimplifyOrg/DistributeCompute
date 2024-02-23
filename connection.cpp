@@ -3,6 +3,8 @@
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>
 
+using namespace ProcessManager;
+
 static boost::uuids::uuid GenerateUUID()
 {
     boost::uuids::random_generator generator;
@@ -14,12 +16,12 @@ connection::connection(config* pConfig)
 {
     m_config.reset(pConfig);
     m_rabbitContext = std::make_unique<rmqa::RabbitContext>();
-    uint16_t port = std::atoi(m_config->get("port").c_str());
-    m_amqpEndPoint = bsl::make_shared<rmqt::SimpleEndpoint>(m_config->get("host"), 
+    uint16_t port = std::atoi(m_config->get("Port").c_str());
+    m_amqpEndPoint = bsl::make_shared<rmqt::SimpleEndpoint>(m_config->get("Host"), 
                                                             "rmqcpp",
                                                             port);
-    m_amqpCredentials = bsl::make_shared<rmqt::PlainCredentials>(m_config->get("user"), 
-                                                                m_config->get("password"));
+    m_amqpCredentials = bsl::make_shared<rmqt::PlainCredentials>(m_config->get("User"), 
+                                                                m_config->get("Password"));
 }
 
 connection::~connection()

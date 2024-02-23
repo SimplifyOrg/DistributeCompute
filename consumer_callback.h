@@ -1,6 +1,6 @@
 #pragma once
 
-#include <rmqa_message.h>
+#include <rmqt_message.h>
 
 using namespace BloombergLP;
 

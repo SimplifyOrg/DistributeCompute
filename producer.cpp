@@ -3,25 +3,6 @@
 #include <rmqa_producer.h>
 #include "config.h"
 
-namespace ProcessManager
-{
-    void receiveConfirmation(const rmqt::Message& message,
-                         const bsl::string& routingKey,
-                         const rmqt::ConfirmResponse& response)
-    {
-        if (response.status() == rmqt::ConfirmResponse::ACK) 
-        {
-            std::cout << "Message received by broker: " << message << std::endl;
-        }
-        else
-        {
-            // REJECT / RETURN indicate problem with the send request (bad routing
-            // key?)
-            std::cerr << "Message cannot be routed properly. Maybe the routing key \"" << routingKey << "\" is bad" << std::endl;
-        }
-    }
-}
-
 ProcessManager::producer::producer(connection* pConnection)
 {
     m_connection.reset(pConnection);
@@ -66,7 +47,7 @@ bool ProcessManager::producer::createProducer()
 void ProcessManager::producer::sendMessage(bsl::string & message, 
                                         void(*brokerAckCallback)(const rmqt::Message& message, 
                                                                 const bsl::string& routingKey, 
-                                                                const rmqt::ConfirmResponse& response) = &ProcessManager::receiveConfirmation)
+                                                                const rmqt::ConfirmResponse& response))
 {
     auto config = m_connection->getConfig();
     bsl::string key = config->get("RoutingKey");

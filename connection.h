@@ -10,23 +10,26 @@
 
 using namespace BloombergLP;
 
-class connection
+namespace ProcessManager
 {
-private:
-    /* data */
-    std::unique_ptr<rmqa::RabbitContext> m_rabbitContext;
-    bsl::shared_ptr<rmqt::SimpleEndpoint> m_amqpEndPoint;
-    bsl::shared_ptr<rmqt::PlainCredentials> m_amqpCredentials;
-    bsl::shared_ptr<config> m_config;
-    bsl::shared_ptr<rmqa::VHost> m_vhost;
-public:
-    connection(config* pConfig);
-    ~connection();
+    class connection
+    {
+    private:
+        /* data */
+        std::unique_ptr<rmqa::RabbitContext> m_rabbitContext;
+        bsl::shared_ptr<rmqt::SimpleEndpoint> m_amqpEndPoint;
+        bsl::shared_ptr<rmqt::PlainCredentials> m_amqpCredentials;
+        bsl::shared_ptr<config> m_config;
+        bsl::shared_ptr<rmqa::VHost> m_vhost;
+    public:
+        connection(config* pConfig);
+        ~connection();
 
-    bool createConnection();
+        bool createConnection();
 
-    bsl::shared_ptr<rmqa::VHost> getVhost() { return m_vhost; }
+        bsl::shared_ptr<rmqa::VHost> getVhost() { return m_vhost; }
 
-    bsl::shared_ptr<config> getConfig() { return m_config; }
+        bsl::shared_ptr<config> getConfig() { return m_config; }
 
-};
+    };
+}

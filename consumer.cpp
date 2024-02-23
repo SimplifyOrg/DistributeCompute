@@ -1,16 +1,18 @@
 #include "consumer.h"
 #include "consumer_callback.h"
 
-ProcessManager::consumer::consumer(connection* pConnection)
+using namespace ProcessManager;
+
+consumer::consumer(connection* pConnection)
 {
     m_connection.reset(pConnection);
 }
 
-ProcessManager::consumer::~consumer()
+consumer::~consumer()
 {
 }
 
-bool ProcessManager::consumer::createConsumer()
+bool consumer::createConsumer()
 {
     auto config = m_connection->getConfig();
     rmqa::Topology topology;
@@ -22,7 +24,7 @@ bool ProcessManager::consumer::createConsumer()
                                     vhost->createConsumer(
                                         topology,            // topology
                                         q1,                  // queue
-                                        ProcessManager::MessageConsumer(),   // Consumer callback invoked on each message
+                                        MessageConsumer(),   // Consumer callback invoked on each message
                                         "my consumer label", // Consumer Label (shows in Management UI)
                                         500                  // prefetch count
                                     );
@@ -31,7 +33,8 @@ bool ProcessManager::consumer::createConsumer()
     {
         // An argument passed to the consumer was bad, retrying will have no effect
         std::cerr << "An argument passed to the consumer was bad, retrying will have no effect"<< std::endl;
-        return;
+        return false;
     }
     m_consumer = consumerResult.value();
+    return true;
 }

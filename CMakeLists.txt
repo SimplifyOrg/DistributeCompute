@@ -12,10 +12,11 @@ find_package(bsl REQUIRED)
 find_package(Boost REQUIRED)
 
 add_executable(ProcessManager 
-        main.cpp
         config.cpp
         connection.cpp
         producer.cpp
+        consumer.cpp
+        main.cpp
         )
 target_link_libraries(ProcessManager PUBLIC 
     rmqcpp::rmq

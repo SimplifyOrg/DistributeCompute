@@ -16,8 +16,13 @@
 #include <bsl_vector.h>
 
 #include "config.h"
+#include "connection.h"
+#include "consumer.h"
+#include "producer.h"
+#include "producer_callback.h"
 
 using namespace BloombergLP;
+using namespace ProcessManager;
 
 int main(int argc, char** argv)
 {
@@ -30,7 +35,29 @@ int main(int argc, char** argv)
     const std::filesystem::path path = argv[1];
     if(conf->readConfigFile(path))
     {
-        
+        bsl::shared_ptr<connection> conn = bsl::make_shared<connection>(conf.get());
+        if(conn->createConnection())
+        {
+            // Start operation
+            if(conf->get("Mode") == "consumer")
+            {
+                bsl::shared_ptr<consumer> cons = bsl::make_shared<consumer>(conn.get());
+                cons->createConsumer();
+            }
+            else
+            {
+                bsl::shared_ptr<producer> prod = bsl::make_shared<producer>(conn.get());
+                if(prod->createProducer())
+                {
+                    bsl::string msg = conf->get("Message");
+                    prod->sendMessage(msg, &receiveConfirmation);
+                }
+            }
+        }
+    }
+    else
+    {
+        std::cerr << "Error reading conf file" << "\n";
     }
     
     return 0;
