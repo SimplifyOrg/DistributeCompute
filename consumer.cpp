@@ -14,8 +14,8 @@ bool ProcessManager::consumer::createConsumer()
 {
     auto config = m_connection->getConfig();
     rmqa::Topology topology;
-    rmqt::QueueHandle q1    = topology.addQueue(config->get("QueueName"));
-    rmqt::ExchangeHandle e1 = topology.addExchange(config->get("ExchangeName"));
+    rmqt::QueueHandle q1    = topology.addPassiveQueue(config->get("QueueName"));
+    rmqt::ExchangeHandle e1 = topology.addPassiveExchange(config->get("ExchangeName"));
     
     auto vhost = m_connection->getVhost();
     rmqt::Result<rmqa::Consumer> consumerResult =
