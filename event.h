@@ -6,7 +6,7 @@ namespace ProcessManager
 {
     class event
     {
-    private:
+    public:
         /* data */
         bsl::string eventKey;
         bsl::string eventData;
