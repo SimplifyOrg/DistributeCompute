@@ -16,6 +16,8 @@ add_executable(ProcessManager
         connection.cpp
         producer.cpp
         consumer.cpp
+        event.cpp
+        event_loop.cpp
         main.cpp
         )
 target_link_libraries(ProcessManager PUBLIC 

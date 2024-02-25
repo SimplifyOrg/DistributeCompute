@@ -6,7 +6,6 @@ namespace ProcessManager
 {
     typedef struct EventResult
     {
-    private:
         /* data */
         bsl::string result;
         bsl::string key;

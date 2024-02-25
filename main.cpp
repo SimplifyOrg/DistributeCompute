@@ -20,6 +20,7 @@
 #include "consumer.h"
 #include "producer.h"
 #include "producer_callback.h"
+#include "event_loop.h"
 
 using namespace BloombergLP;
 using namespace ProcessManager;
@@ -33,32 +34,63 @@ int main(int argc, char** argv)
 
     bsl::shared_ptr<config> conf = bsl::make_shared<config>();
     const std::filesystem::path path = argv[1];
-    if(conf->readConfigFile(path))
+    if(!conf->readConfigFile(path))
     {
-        bsl::shared_ptr<connection> conn = bsl::make_shared<connection>(conf.get());
-        if(conn->createConnection())
-        {
-            // Start operation
-            if(conf->get("Mode") == "consumer")
-            {
-                bsl::shared_ptr<consumer> cons = bsl::make_shared<consumer>(conn.get());
-                cons->createConsumer();
-            }
-            else
-            {
-                bsl::shared_ptr<producer> prod = bsl::make_shared<producer>(conn.get());
-                if(prod->createProducer())
-                {
-                    bsl::string msg = conf->get("Message");
-                    prod->sendMessage(msg, &receiveConfirmation);
-                }
-            }
-        }
-    }
-    else
-    {
+        
         std::cerr << "Error reading conf file" << "\n";
+        // bsl::shared_ptr<connection> conn = bsl::make_shared<connection>(conf.get());
+        // if(conn->createConnection())
+        // {
+        //     // Start operation
+        //     if(conf->get("Mode") == "consumer")
+        //     {
+        //         bsl::shared_ptr<consumer> cons = bsl::make_shared<consumer>(conn.get());
+        //         cons->createConsumer();
+        //     }
+        //     else
+        //     {
+        //         bsl::shared_ptr<producer> prod = bsl::make_shared<producer>(conn.get());
+        //         if(prod->createProducer())
+        //         {
+        //             bsl::string msg = conf->get("Message");
+        //             prod->sendMessage(msg, &receiveConfirmation);
+        //         }
+        //     }
+        // }
+        return EXIT_FAILURE;
     }
     
+    event_loop evLoop;
+    int eventId = 0;
+
+    try
+    {
+        bsl::shared_ptr<connection> conn = bsl::make_shared<connection>(conf.get());
+        if(!conn->createConnection())
+        {
+            return EXIT_FAILURE;
+        }
+        do
+        {
+            bsl::string uniqueEventKey = "message_" + bsl::to_string(++eventId);
+            event ev(uniqueEventKey, "main_consumer", true);
+            evLoop
+                .on(uniqueEventKey, [conn](const bsl::string& data){
+                    bsl::shared_ptr<consumer> cons = bsl::make_shared<consumer>(conn.get());
+                    cons->createConsumer();
+                    return "Success";
+                })
+                .dispatch(ev);
+            
+            evLoop.run();
+
+        } while (true);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    
+
     return 0;
 }

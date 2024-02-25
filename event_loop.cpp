@@ -1,5 +1,6 @@
 #include "event_loop.h"
 #include <thread>
+#include <iostream>
 
 using namespace ProcessManager;
 
@@ -11,7 +12,7 @@ event_loop::~event_loop()
 {
 }
 
-event_loop& event_loop::on(bsl::string key, std::function<void(bsl::string, bsl::string)>)
+event_loop& event_loop::on(bsl::string key, std::function<bsl::string(bsl::string)> handler)
 {
     handlers[key] = handler;
     return *this;
@@ -41,9 +42,9 @@ void event_loop::run()
         }
     }
 
-    if(processedEvents.empty() == false)
+    if(results.empty() == false)
     {
-        auto processedEvent = processedEvents.front(); processedEvent.pop_front();
+        auto processedEvent = results.front(); results.pop_front();
         produceOutputFor(processedEvent);
     }
 }
@@ -52,13 +53,13 @@ void event_loop::processAsync(event &ev)
 {
     std::thread([this, ev]() 
     {
-        processedEvents.push_back({ev.eventKey handlers[ev.eventKey](ev.eventData)});
+        results.push_back({ev.eventKey, handlers[ev.eventKey](ev.eventData)});
     }).detach();
 }
 
 void event_loop::processSync(event &ev) 
 {
-    processedEvents.push_back({ev.eventKey, handlers[ev.eventKey](ev.eventData)});
+    results.push_back({ev.eventKey, handlers[ev.eventKey](ev.eventData)});
 }
 
 void event_loop::produceOutputFor(event_result &eventResult) 

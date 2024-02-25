@@ -14,13 +14,13 @@ namespace ProcessManager
         /* data */
         // TODO : Add framework for prioritising some events
         std::deque<event> events;
-        std::map<bsl::string, std::function<void(bsl::string, bsl::string)>> handlers;
+        std::map<bsl::string, std::function<bsl::string(bsl::string)>> handlers;
         std::deque<event_result> results;
     public:
         event_loop(/* args */);
         ~event_loop();
 
-        event_loop& on(bsl::string key, std::function<void(bsl::string, bsl::string)>);
+        event_loop& on(bsl::string key, std::function<bsl::string(bsl::string)>);
 
         void dispatch(event &ev);
 
