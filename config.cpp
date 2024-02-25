@@ -23,17 +23,25 @@ config::~config()
 
 bool config::readConfigFile(const std::filesystem::path & configPath)
 {
-    if(configPath.empty())
+    if(configPath.empty() || std::filesystem::exists(configPath) == false)
     {
         std::cerr << "Config file path is not provided" << std::endl;
         return false;
     }
+    else
+    {
+        std::cout << "Config file present at: " << configPath.c_str() << std::endl;
+    }
     
     // read a JSON file
     std::ifstream configStream(configPath.c_str());
-    json tempConfigObject;
-    configStream >> tempConfigObject;
-    m_configObject.reset(std::move(&tempConfigObject));
+    std::string temp, tempConf;
+    while(std::getline(configStream, temp)) {
+        //Do with temp
+        tempConf.append(temp);
+    }
+    json* tempJson = new json(json::parse(tempConf.c_str()));
+    m_configObject.reset(tempJson);
     return true;
 }
 
@@ -46,7 +54,7 @@ bsl::string config::get(const bsl::string &key)
 
     if(!m_configObject->contains(key.c_str()))
     {
-        std::cerr << "Key not present in the config" << std::endl;
+        std::cerr << "Key \"" << key <<"\" not present in the config" << std::endl;
         return bsl::string();
     }
     auto value = m_configObject->at(key);
