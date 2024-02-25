@@ -1,10 +1,10 @@
 {
     "Mode" : "consumer",
-    "QueueName" : "testQueue",
-    "ExchangeName" : "testExchange",
+    "QueueName" : "queue-name1",
+    "ExchangeName" : "exch-name1",
     "Host" : "localhost",
-    "Port" : "5762",
-    "User" : "",
-    "Password" : "",
-    "RoutingKey" : "testQueue"
+    "Port" : "5672",
+    "User" : "guest",
+    "Password" : "guest",
+    "RoutingKey" : "routingkey1"
 }

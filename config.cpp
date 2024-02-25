@@ -1,6 +1,7 @@
 #include "config.h"
 #include <fstream>
 #include <iostream>
+// #include <string>
 
 static bool validateKey(const bsl::string &key)
 {
@@ -18,7 +19,7 @@ config::config(/* args */)
 
 config::~config()
 {
-    m_configObject.release();
+    // m_configObject.release();
 }
 
 bool config::readConfigFile(const std::filesystem::path & configPath)
@@ -58,5 +59,7 @@ bsl::string config::get(const bsl::string &key)
         return bsl::string();
     }
     auto value = m_configObject->at(key);
-    return bsl::string(value.dump().c_str());
+    std::string val;
+    value.get_to(val);
+    return bsl::string(val.c_str());
 }

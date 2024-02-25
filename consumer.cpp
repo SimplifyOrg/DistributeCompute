@@ -1,7 +1,27 @@
 #include "consumer.h"
 #include "consumer_callback.h"
+#include <bdlpcre_regex.h>
 
 using namespace ProcessManager;
+
+namespace BloombergLP {
+namespace rmqt {
+namespace {
+const size_t MAX_EXCHANGE_NAME_LENGTH = 127;
+}
+}
+}
+
+static bool validateName(const bsl::string& exchangeName)
+{
+    bdlpcre::RegEx regex;
+    bsl::string errMsg;
+    size_t errOff;
+    regex.prepare(&errMsg, &errOff, "^[a-zA-Z0-9-_.:]*$");
+    std::cout << exchangeName << " " << exchangeName.length() << std::endl;
+    return (exchangeName.size() <= rmqt::MAX_EXCHANGE_NAME_LENGTH) &&
+           0 == regex.match(exchangeName.c_str(), exchangeName.length());
+}
 
 consumer::consumer(connection* pConnection)
 {
@@ -13,11 +33,18 @@ consumer::~consumer()
 }
 
 bool consumer::createConsumer()
-{
+{    
     auto config = m_connection->getConfig();
+    std::cout << config->get("ExchangeName") << std::endl;
+    if(!validateName(config->get("ExchangeName")))
+    {
+        std::cerr << "Invalid Exchange name: " << config->get("ExchangeName") << std::endl;
+        return false;
+    }
     rmqa::Topology topology;
     rmqt::QueueHandle q1    = topology.addPassiveQueue(config->get("QueueName"));
     rmqt::ExchangeHandle e1 = topology.addPassiveExchange(config->get("ExchangeName"));
+    // topology.bind(e1, q1, config->get("RoutingKey"));
     
     auto vhost = m_connection->getVhost();
     rmqt::Result<rmqa::Consumer> consumerResult =
@@ -26,7 +53,7 @@ bool consumer::createConsumer()
                                         q1,                  // queue
                                         MessageConsumer(),   // Consumer callback invoked on each message
                                         "my consumer label", // Consumer Label (shows in Management UI)
-                                        500                  // prefetch count
+                                        1                  // prefetch count
                                     );
 
     if (!consumerResult) 
@@ -35,6 +62,7 @@ bool consumer::createConsumer()
         std::cerr << "An argument passed to the consumer was bad, retrying will have no effect"<< std::endl;
         return false;
     }
+    
     m_consumer = consumerResult.value();
     return true;
 }

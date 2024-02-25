@@ -18,7 +18,7 @@ connection::connection(config* pConfig)
     m_rabbitContext = std::make_unique<rmqa::RabbitContext>();
     uint16_t port = std::atoi(m_config->get("Port").c_str());
     m_amqpEndPoint = bsl::make_shared<rmqt::SimpleEndpoint>(m_config->get("Host"), 
-                                                            "rmqcpp",
+                                                            "/",
                                                             port);
     m_amqpCredentials = bsl::make_shared<rmqt::PlainCredentials>(m_config->get("User"), 
                                                                 m_config->get("Password"));
@@ -26,7 +26,7 @@ connection::connection(config* pConfig)
 
 connection::~connection()
 {
-    m_vhost->close();
+    // m_vhost->close();
 }
 
 bool connection::createConnection()
