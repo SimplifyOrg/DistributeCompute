@@ -60,7 +60,7 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
     
-    event_loop evLoop;
+    event_loop& evLoop = event_loop::getInstance();
     int eventId = 0;
 
     try
@@ -70,18 +70,17 @@ int main(int argc, char** argv)
         {
             return EXIT_FAILURE;
         }
+        bsl::string uniqueEventKey = "message_" + bsl::to_string(eventId);
+        event ev(uniqueEventKey, "main_consumer", true);
+        evLoop
+            .on(uniqueEventKey, [conn](const bsl::string& data){
+                bsl::shared_ptr<consumer> cons = bsl::make_shared<consumer>(conn.get());
+                cons->createConsumer();
+                return "Success";
+            })
+            .dispatch(ev);
         do
-        {
-            bsl::string uniqueEventKey = "message_" + bsl::to_string(++eventId);
-            event ev(uniqueEventKey, "main_consumer", true);
-            evLoop
-                .on(uniqueEventKey, [conn](const bsl::string& data){
-                    bsl::shared_ptr<consumer> cons = bsl::make_shared<consumer>(conn.get());
-                    cons->createConsumer();
-                    return "Success";
-                })
-                .dispatch(ev);
-            
+        {            
             evLoop.run();
 
         } while (true);

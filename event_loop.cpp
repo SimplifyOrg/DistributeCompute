@@ -4,6 +4,9 @@
 
 using namespace ProcessManager;
 
+event_loop* event_loop::m_instance = nullptr;
+std::mutex event_loop::m_mutex;
+
 event_loop::event_loop(/* args */)
 {
 }

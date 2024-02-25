@@ -26,6 +26,7 @@ connection::connection(config* pConfig)
 
 connection::~connection()
 {
+    m_vhost->close();
 }
 
 bool connection::createConnection()
