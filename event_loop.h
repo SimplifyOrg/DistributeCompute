@@ -21,7 +21,7 @@ namespace ProcessManager
         static event_loop* m_instance;
     public:
 
-        static event_loop& getInstance() 
+        static event_loop& getInstance()
         {
             if (!m_instance) 
             {
