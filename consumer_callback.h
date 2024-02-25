@@ -13,7 +13,7 @@ namespace ProcessManager
         bool processMessage(const rmqt::Message& message)
         {
             // process Message here
-            std::cout << message.payload() << std::endl;
+            std::cout << "Payload: " << message.payload() << std::endl;
             return true;
         }
 

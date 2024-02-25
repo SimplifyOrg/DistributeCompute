@@ -18,7 +18,7 @@ messageId = 1
 while(True):
     message = f"Sending Message Id: {messageId}"
 
-    channel.basic_publish(exchange='exch-name', routing_key='routingkey', body=message)
+    channel.basic_publish(exchange='exch-name1', routing_key='routingkey1', body=message)
 
     print(f"sent message: {message}")
     

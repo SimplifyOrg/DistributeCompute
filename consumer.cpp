@@ -23,9 +23,9 @@ static bool validateName(const bsl::string& exchangeName)
            0 == regex.match(exchangeName.c_str(), exchangeName.length());
 }
 
-consumer::consumer(connection* pConnection)
+consumer::consumer(bsl::shared_ptr<connection> pConnection)
 {
-    m_connection.reset(pConnection);
+    m_connection = pConnection;
 }
 
 consumer::~consumer()
@@ -44,7 +44,7 @@ bool consumer::createConsumer()
     rmqa::Topology topology;
     rmqt::QueueHandle q1    = topology.addPassiveQueue(config->get("QueueName"));
     rmqt::ExchangeHandle e1 = topology.addPassiveExchange(config->get("ExchangeName"));
-    // topology.bind(e1, q1, config->get("RoutingKey"));
+    //topology.bind(e1, q1, config->get("RoutingKey"));
     
     auto vhost = m_connection->getVhost();
     rmqt::Result<rmqa::Consumer> consumerResult =
@@ -52,8 +52,8 @@ bool consumer::createConsumer()
                                         topology,            // topology
                                         q1,                  // queue
                                         MessageConsumer(),   // Consumer callback invoked on each message
-                                        "my consumer label", // Consumer Label (shows in Management UI)
-                                        1                  // prefetch count
+                                        "testConsumer", // Consumer Label (shows in Management UI)
+                                        500                  // prefetch count
                                     );
 
     if (!consumerResult) 

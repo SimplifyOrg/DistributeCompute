@@ -12,9 +12,9 @@ static boost::uuids::uuid GenerateUUID()
     return uuid;
 }
 
-connection::connection(config* pConfig)
+connection::connection(bsl::shared_ptr<config> pConfig)
 {
-    m_config.reset(pConfig);
+    m_config = pConfig;
     m_rabbitContext = std::make_unique<rmqa::RabbitContext>();
     uint16_t port = std::atoi(m_config->get("Port").c_str());
     m_amqpEndPoint = bsl::make_shared<rmqt::SimpleEndpoint>(m_config->get("Host"), 
@@ -36,7 +36,7 @@ bool connection::createConnection()
     
     try
     {
-        m_vhost = m_rabbitContext->createVHostConnection(connectionString,
+        m_vhost = m_rabbitContext->createVHostConnection("testConnection",
                                                         m_amqpEndPoint,
                                                         m_amqpCredentials); // returns immediately
     }

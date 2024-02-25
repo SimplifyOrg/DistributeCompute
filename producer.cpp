@@ -3,9 +3,9 @@
 #include <rmqa_producer.h>
 #include "config.h"
 
-ProcessManager::producer::producer(connection* pConnection)
+ProcessManager::producer::producer(bsl::shared_ptr<connection> pConnection)
 {
-    m_connection.reset(pConnection);
+    m_connection = pConnection;
     m_maxOutstandingConfirms = 10;
 }
 

@@ -17,7 +17,7 @@ namespace ProcessManager
         bsl::shared_ptr<connection> m_connection;
         uint16_t m_maxOutstandingConfirms;
     public:
-        producer(connection* pConnection);
+        producer(bsl::shared_ptr<connection> pConnection);
         ~producer();
 
         bool createProducer();

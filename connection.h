@@ -22,7 +22,7 @@ namespace ProcessManager
         bsl::shared_ptr<config> m_config;
         bsl::shared_ptr<rmqa::VHost> m_vhost;
     public:
-        connection(config* pConfig);
+        connection(bsl::shared_ptr<config> pConfig);
         ~connection();
 
         bool createConnection();

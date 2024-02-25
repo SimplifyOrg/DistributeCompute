@@ -31,7 +31,6 @@ void event_loop::run()
     if(events.empty() == false)
     {
         event ev = events.front(); events.pop_front();
-        std::cout << "here" << std::endl;
         if(handlers.count(ev.eventKey) > 0)
         {
             if(ev.isAsyncEvent)

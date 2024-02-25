@@ -65,16 +65,17 @@ int main(int argc, char** argv)
 
     try
     {
-        bsl::shared_ptr<connection> conn = bsl::make_shared<connection>(conf.get());
+        bsl::shared_ptr<connection> conn = bsl::make_shared<connection>(conf);
         if(!conn->createConnection())
         {
             return EXIT_FAILURE;
         }
         bsl::string uniqueEventKey = "message_" + bsl::to_string(eventId);
         event ev(uniqueEventKey, "main_consumer", true);
+
         evLoop
             .on(uniqueEventKey, [conn](const bsl::string& data){
-                bsl::shared_ptr<consumer> cons = bsl::make_shared<consumer>(conn.get());
+                bsl::shared_ptr<consumer> cons = bsl::make_shared<consumer>(conn);
                 cons->createConsumer();
                 return "Success";
             })
