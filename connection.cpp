@@ -1,16 +1,7 @@
 #include "connection.h"
-#include <boost/uuid/uuid.hpp>            // uuid class
-#include <boost/uuid/uuid_generators.hpp> // generators
-#include <boost/uuid/uuid_io.hpp>
+#include "uuid_generator.h"
 
 using namespace ProcessManager;
-
-static boost::uuids::uuid GenerateUUID()
-{
-    boost::uuids::random_generator generator;
-    boost::uuids::uuid uuid = generator();
-    return uuid;
-}
 
 connection::connection(bsl::shared_ptr<config> pConfig)
 {
