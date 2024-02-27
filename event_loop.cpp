@@ -61,6 +61,7 @@ void event_loop::processAsync(event &ev)
 
 void event_loop::processSync(event &ev) 
 {
+    std::cout << ev.eventData << std::endl;
     results.push_back({ev.eventKey, handlers[ev.eventKey](ev.eventData)});
 }
 

@@ -36,7 +36,7 @@ bool connection::createConnection()
     
     try
     {
-        m_vhost = m_rabbitContext->createVHostConnection("testConnection",
+        m_vhost = m_rabbitContext->createVHostConnection(connectionString,
                                                         m_amqpEndPoint,
                                                         m_amqpCredentials); // returns immediately
     }

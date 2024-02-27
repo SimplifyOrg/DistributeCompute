@@ -23,6 +23,26 @@ static bool validateName(const bsl::string& exchangeName)
            0 == regex.match(exchangeName.c_str(), exchangeName.length());
 }
 
+bool processMessage(const rmqt::Message& message)
+{
+    // process Message here
+    std::cout << "Payload: " << message.payload() << std::endl;
+    return true;
+}
+
+void onMessage(rmqp::MessageGuard& messageGuard)
+{
+    if (processMessage(messageGuard.message())) 
+    {
+        messageGuard.ack();
+    }
+    else 
+    {
+        messageGuard.nack();
+        // Would automatically nack if it goes out of scope
+    }
+}
+
 consumer::consumer(bsl::shared_ptr<connection> pConnection)
 {
     m_connection = pConnection;
@@ -51,11 +71,14 @@ bool consumer::createConsumer()
                                     vhost->createConsumer(
                                         topology,            // topology
                                         q1,                  // queue
-                                        MessageConsumer(),   // Consumer callback invoked on each message
-                                        "testConsumer", // Consumer Label (shows in Management UI)
-                                        500                  // prefetch count
+                                        [](rmqp::MessageGuard& messageGuard){
+                                            std::cout << "Payload: " << messageGuard.message().payload() << std::endl;
+                                            messageGuard.ack();
+                                        },//&onMessage,//std::bind(&MessageConsumer::operator(), *(new MessageConsumer())),   // Consumer callback invoked on each message
+                                        "testConnection-consumer", // Consumer Label (shows in Management UI)
+                                        20                  // prefetch count
                                     );
-
+    
     if (!consumerResult) 
     {
         // An argument passed to the consumer was bad, retrying will have no effect
@@ -64,5 +87,6 @@ bool consumer::createConsumer()
     }
     
     m_consumer = consumerResult.value();
+    std::cout << "here: " << consumerResult.returnCode() << std::endl;
     return true;
 }
