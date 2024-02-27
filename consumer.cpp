@@ -18,7 +18,6 @@ static bool validateName(const bsl::string& exchangeName)
     bsl::string errMsg;
     size_t errOff;
     regex.prepare(&errMsg, &errOff, "^[a-zA-Z0-9-_.:]*$");
-    std::cout << exchangeName << " " << exchangeName.length() << std::endl;
     return (exchangeName.size() <= rmqt::MAX_EXCHANGE_NAME_LENGTH) &&
            0 == regex.match(exchangeName.c_str(), exchangeName.length());
 }
@@ -55,7 +54,6 @@ consumer::~consumer()
 bool consumer::createConsumer()
 {    
     auto config = m_connection->getConfig();
-    std::cout << config->get("ExchangeName") << std::endl;
     if(!validateName(config->get("ExchangeName")))
     {
         std::cerr << "Invalid Exchange name: " << config->get("ExchangeName") << std::endl;
@@ -71,10 +69,7 @@ bool consumer::createConsumer()
                                     vhost->createConsumer(
                                         topology,            // topology
                                         q1,                  // queue
-                                        [](rmqp::MessageGuard& messageGuard){
-                                            std::cout << "Payload: " << messageGuard.message().payload() << std::endl;
-                                            messageGuard.ack();
-                                        },//&onMessage,//std::bind(&MessageConsumer::operator(), *(new MessageConsumer())),   // Consumer callback invoked on each message
+                                        MessageConsumer(),   // Consumer callback invoked on each message
                                         "testConnection-consumer", // Consumer Label (shows in Management UI)
                                         20                  // prefetch count
                                     );
@@ -87,6 +82,5 @@ bool consumer::createConsumer()
     }
     
     m_consumer = consumerResult.value();
-    std::cout << "here: " << consumerResult.returnCode() << std::endl;
     return true;
 }

@@ -14,6 +14,7 @@ find_package(Boost REQUIRED)
 
 add_executable(ProcessManager 
         config.cpp
+        consumer_callback.cpp
         connection.cpp
         producer.cpp
         consumer.cpp
