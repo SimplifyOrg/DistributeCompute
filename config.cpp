@@ -41,7 +41,25 @@ bool config::readConfigFile(const std::filesystem::path & configPath)
         //Do with temp
         tempConf.append(temp);
     }
-    json* tempJson = new json(json::parse(tempConf.c_str()));
+    try
+    {
+        if(readData(tempConf.c_str()))
+        {
+            return true;
+        }
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+        return false;
+    }
+    
+    return true;
+}
+
+bool config::readData(const bsl::string& data)
+{
+    json* tempJson = new json(json::parse(data.c_str()));
     m_configObject.reset(tempJson);
     return true;
 }

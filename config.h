@@ -17,5 +17,6 @@ public:
     config(/* args */);
     ~config();
     bool readConfigFile(const std::filesystem::path &configPath);
+    bool readData(const bsl::string& data);
     bsl::string get(const bsl::string &key);
 };
