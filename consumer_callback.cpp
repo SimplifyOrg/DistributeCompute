@@ -15,7 +15,7 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
     boost::uuids::uuid messageId = GenerateUUID();
     bsl::string processString = boost::uuids::to_string(messageId);
     bsl::string uniqueEventKey = "message_" + processString;
-    event ev(uniqueEventKey, (char *)(message.payload()), false);
+    event ev(uniqueEventKey, (char *)(message.payload()), true);
     std::cout << "Currrent Thread id: " << std::this_thread::get_id() << std::endl;
     event_loop& evLoop = event_loop::getInstance();
     evLoop
