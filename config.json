@@ -6,5 +6,9 @@
     "Port" : "5672",
     "User" : "guest",
     "Password" : "guest",
-    "RoutingKey" : "routingkey"
+    "RoutingKey" : "routingkey",
+    "ProcessDetails" : {
+        "Process" : "",
+        "Param" : ""
+    }
 }
