@@ -10,7 +10,8 @@ include(CTest)
 enable_testing()
 find_package(rmqcpp REQUIRED)
 find_package(bsl REQUIRED)
-find_package(Boost REQUIRED)
+find_package(Boost REQUIRED COMPONENTS
+    date_time filesystem iostreams)
 
 add_executable(ProcessManager 
         config.cpp
@@ -26,6 +27,8 @@ add_executable(ProcessManager
 target_link_libraries(ProcessManager PUBLIC 
     rmqcpp::rmq
     bsl
+    boost_system
+    Boost::filesystem
     )
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
