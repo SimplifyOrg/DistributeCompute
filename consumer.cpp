@@ -22,26 +22,6 @@ static bool validateName(const bsl::string& exchangeName)
            0 == regex.match(exchangeName.c_str(), exchangeName.length());
 }
 
-bool processMessage(const rmqt::Message& message)
-{
-    // process Message here
-    std::cout << "Payload: " << message.payload() << std::endl;
-    return true;
-}
-
-void onMessage(rmqp::MessageGuard& messageGuard)
-{
-    if (processMessage(messageGuard.message())) 
-    {
-        messageGuard.ack();
-    }
-    else 
-    {
-        messageGuard.nack();
-        // Would automatically nack if it goes out of scope
-    }
-}
-
 consumer::consumer(bsl::shared_ptr<connection> pConnection)
 {
     m_connection = pConnection;

@@ -1,0 +1,12 @@
+{
+    "Process" : "",
+    "Param" : "",
+    "ResponseConfig" : {
+        "QueueName" : "queue-name",
+        "ExchangeName" : "exch-name",
+        "Host" : "localhost",
+        "Port" : "5672",
+        "User" : "guest",
+        "Password" : "guest"
+    }
+}
