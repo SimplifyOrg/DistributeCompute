@@ -25,14 +25,29 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
     std::cout << "Currrent Thread id: " << std::this_thread::get_id() << std::endl;
     event_loop& evLoop = event_loop::getInstance();
     evLoop
-        .on(uniqueEventKey, [](const bsl::string& data){
+        .on(uniqueEventKey, [](const bsl::string& inputData){
             std::cout << "Currrent Thread id: " << std::this_thread::get_id() << std::endl;
-            std::cout << "Test data: " << data << std::endl;
+            std::cout << "Test data: " << inputData << std::endl;
+            std::string data(inputData.c_str());
+            if(data[data.size()-1] != '}')
+            {
+                auto pos = data.find_last_of('}');
+                data.erase(data.begin()+pos+1, data.end());
+            }
             bsl::shared_ptr<config> conf = bsl::make_shared<config>();
             bsl::vector<bsl::string> responseVec;
             if(conf->readData(data))
             {
-                boost::process::filesystem::path process = boost::process::search_path(conf->get("Process").c_str());
+                boost::process::filesystem::path process;
+                if(conf->get("PathType") == "full-path")
+                {
+                    process = conf->get("Process").c_str();
+                }
+                else
+                {
+                    process = boost::process::search_path(conf->get("Process").c_str());
+                }
+                
                 if(boost::filesystem::exists(process))
                 {
                     bsl::shared_ptr<IAction> action = bsl::make_shared<action_process>(process.generic_string(), conf->get("Param").c_str());

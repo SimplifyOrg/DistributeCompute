@@ -1,5 +1,6 @@
 {
     "Process" : "",
+    "PathType" : "full-path",
     "Param" : "",
     "ResponseConfig" : {
         "QueueName" : "queue-name",

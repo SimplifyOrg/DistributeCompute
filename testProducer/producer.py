@@ -1,6 +1,7 @@
 import pika
 import time
 import random
+import json
 
 connection_parameters = pika.ConnectionParameters('localhost')
 
@@ -16,11 +17,12 @@ channel = connection.channel()
 messageId = 1
 
 while(True):
-    message = f"Sending Message Id: {messageId}"
+    #message = f"Sending Message Id: {messageId}"
+    messageJson = '{"Process" : "/home/abs/process/build/process", "PathType" : "full-path", "Param" : "", "ResponseConfig" : {"QueueName" : "queue-name","ExchangeName" : "exch-name","Host" : "localhost","Port" : "5672","User" : "guest","Password" : "guest"} }'
+    #message = json.dumps(messageJson)
+    channel.basic_publish(exchange='exch-name', routing_key='routingkey', body=str(messageJson))
 
-    channel.basic_publish(exchange='exch-name', routing_key='routingkey', body=message)
-
-    print(f"sent message: {message}")
+    print(f"sent message: {messageJson}")
     
     time.sleep(random.randint(1, 4))
 
