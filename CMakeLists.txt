@@ -13,8 +13,10 @@ find_package(bsl REQUIRED)
 find_package(Boost REQUIRED COMPONENTS
     date_time filesystem iostreams)
 find_package(spdlog CONFIG REQUIRED)
+find_package(cpr REQUIRED)
 
 add_executable(ProcessManager 
+        download.cpp
         config.cpp
         consumer_callback.cpp
         connection.cpp
@@ -31,6 +33,7 @@ target_link_libraries(ProcessManager PUBLIC
     boost_system
     Boost::filesystem
     spdlog::spdlog
+    cpr::cpr
     )
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
