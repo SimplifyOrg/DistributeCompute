@@ -14,6 +14,7 @@
 #include <bsl_memory.h>
 #include <bsl_optional.h>
 #include <bsl_vector.h>
+#include "spdlog/spdlog.h"
 
 #include "config.h"
 #include "connection.h"
@@ -29,7 +30,7 @@ using namespace ProcessManager;
 int main(int argc, char** argv)
 {
     if (argc < 2) {
-        std::cerr << "USAGE: " << argv[0] << " <config.json path> \n";
+        spdlog::critical("USAGE: {} <config.json path>", argv[0]);
         return 1;
     }
     const std::filesystem::path path = argv[1];

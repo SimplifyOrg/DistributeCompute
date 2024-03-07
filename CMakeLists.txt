@@ -12,6 +12,7 @@ find_package(rmqcpp REQUIRED)
 find_package(bsl REQUIRED)
 find_package(Boost REQUIRED COMPONENTS
     date_time filesystem iostreams)
+find_package(spdlog CONFIG REQUIRED)
 
 add_executable(ProcessManager 
         config.cpp
@@ -29,6 +30,7 @@ target_link_libraries(ProcessManager PUBLIC
     bsl
     boost_system
     Boost::filesystem
+    spdlog::spdlog
     )
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
