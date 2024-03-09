@@ -1,4 +1,4 @@
-# ProcessManager
+# Distribute Compute
 
 #### Init Cmake:
 
