@@ -1,6 +1,8 @@
 {
     "Process" : "",
+    "downloadLocation" : "{\"linux\" : \"/home/abs/process/build/\"}",
     "PathType" : "full-path",
+    "DownloadURL" : "",
     "Param" : "",
     "ResponseConfig" : {
         "QueueName" : "queue-name",

@@ -18,7 +18,7 @@ messageId = 1
 
 while(True):
     #message = f"Sending Message Id: {messageId}"
-    messageJson = '{"Process" : "/home/abs/process/build/process", "PathType" : "full-path", "Param" : "", "ResponseConfig" : {"QueueName" : "queue-name","ExchangeName" : "exch-name","Host" : "localhost","Port" : "5672","User" : "guest","Password" : "guest"} }'
+    messageJson = '{"Process" : "process", "downloadURL" : "", "downloadLocation" : "{"linux" : "/home/abs/process/build/"}", "PathType" : "full-path", "Param" : "", "ResponseConfig" : {"QueueName" : "queue-name","ExchangeName" : "exch-name","Host" : "localhost","Port" : "5672","User" : "guest","Password" : "guest"} }'
     #message = json.dumps(messageJson)
     channel.basic_publish(exchange='exch-name', routing_key='routingkey', body=str(messageJson))
 

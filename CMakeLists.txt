@@ -16,7 +16,7 @@ find_package(spdlog CONFIG REQUIRED)
 find_package(cpr REQUIRED)
 
 add_executable(ProcessManager 
-        download.cpp
+        downloader.cpp
         config.cpp
         consumer_callback.cpp
         connection.cpp

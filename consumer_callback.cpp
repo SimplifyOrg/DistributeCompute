@@ -5,11 +5,13 @@
 #include <bsl_string.h>
 #include <bsl_memory.h>
 #include <string>
+#include "spdlog/spdlog.h"
 #include <boost/process/search_path.hpp>
 #include <boost/filesystem.hpp>
 #include "config.h"
 #include "IAction.h"
 #include "action_process.h"
+#include "downloader.h"
 
 using namespace BloombergLP;
 using namespace ProcessManager;
@@ -38,13 +40,24 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
             bsl::vector<bsl::string> responseVec;
             if(conf->readData(data))
             {
+                
                 boost::process::filesystem::path process;
                 if(conf->get("PathType") == "full-path")
                 {
-                    process = conf->get("Process").c_str();
+                    bsl::shared_ptr<config> confPath = bsl::make_shared<config>();
+                    if(!confPath->readData(conf->get("downloadLocation")))
+                    {
+                        // Download to a default location in case
+                        // download location is not provided or 
+                        // improperly formatted
+                        process.append("/home/");
+                    }
+                    
+                    process.append(conf->get("Process").c_str());
                 }
                 else
                 {
+                    // Search in $PATH locations
                     process = boost::process::search_path(conf->get("Process").c_str());
                 }
                 
@@ -56,7 +69,20 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
                 }
                 else
                 {
-                    return bsl::string("ERROR: Could not find the process file at: ") + process.generic_string();
+                    // If the file does not exit try downloading it
+                    bsl::shared_ptr<downloader> downloadUtil = bsl::make_shared<downloader>();
+                    try
+                    {
+                        downloadUtil->download(conf->get("DownloadURL").c_str());
+                        bsl::shared_ptr<IAction> action = bsl::make_shared<action_process>(process.generic_string(), conf->get("Param").c_str());
+                        action->execute();
+                        responseVec = action->getResponse();
+                    }
+                    catch(const std::exception& e)
+                    {
+                        spdlog::critical("ERROR: Could not find the process file at: {}, Exception: {}", process.generic_string(), e.what());
+                        return bsl::string("ERROR: Could not run process");
+                    }
                 }
             }
             else
