@@ -12,7 +12,7 @@ namespace ProcessManager
         downloader(/* args */);
         ~downloader();
 
-        void download(bsl::string url);
+        void download(bsl::string url, bsl::string processName);
     };  
 } // namespace ProcessManager
 

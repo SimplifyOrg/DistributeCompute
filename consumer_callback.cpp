@@ -73,7 +73,7 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
                     bsl::shared_ptr<downloader> downloadUtil = bsl::make_shared<downloader>();
                     try
                     {
-                        downloadUtil->download(conf->get("DownloadURL").c_str());
+                        downloadUtil->download(conf->get("DownloadURL").c_str(), conf->get("Process"));
                         bsl::shared_ptr<IAction> action = bsl::make_shared<action_process>(process.generic_string(), conf->get("Param").c_str());
                         action->execute();
                         responseVec = action->getResponse();

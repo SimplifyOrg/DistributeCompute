@@ -11,12 +11,8 @@ downloader::~downloader()
 {
 }
 
-void downloader::download(bsl::string url)
+void downloader::download(bsl::string url, bsl::string processName)
 {
-    cpr::Response r = cpr::Get(cpr::Url{url.c_str()},
-                      cpr::Authentication{"user", "pass", cpr::AuthMode::BASIC},
-                      cpr::Parameters{{"anon", "true"}, {"key", "value"}});
-    r.status_code;                  // 200
-    r.header["content-type"];       // application/json; charset=utf-8
-    r.text;
+    std::ofstream of(processName.c_str(), std::ios::binary);
+    cpr::Response r = cpr::Download(of, cpr::Url{url.c_str()});
 }
