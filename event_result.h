@@ -1,4 +1,5 @@
 #include <bsl_string.h>
+#include "config.h"
 
 using namespace BloombergLP;
 
@@ -9,6 +10,6 @@ namespace ProcessManager
         /* data */
         bsl::string result;
         bsl::string key;
-
+        
     } event_result;
 } // namespace ProcessManager

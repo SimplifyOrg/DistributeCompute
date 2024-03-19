@@ -28,6 +28,14 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
     event_loop& evLoop = event_loop::getInstance();
     evLoop
         .on(uniqueEventKey, [](const bsl::string& inputData){
+
+            ///////////////////////////////////////////////////////////////
+            // This lambda is only for experimentation
+            // We will have to break this up in a proper
+            // design to take care of all scenarios and
+            // all platforms.
+            // As of now this is defect gold mine.
+            ///////////////////////////////////////////////////////////////
             std::cout << "Currrent Thread id: " << std::this_thread::get_id() << std::endl;
             std::cout << "Test data: " << inputData << std::endl;
             std::string data(inputData.c_str());
@@ -40,7 +48,6 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
             bsl::vector<bsl::string> responseVec;
             if(conf->readData(data))
             {
-                
                 boost::process::filesystem::path process;
                 if(conf->get("PathType") == "full-path")
                 {
@@ -51,6 +58,11 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
                         // download location is not provided or 
                         // improperly formatted
                         process.append("/home/");
+                    }
+                    else
+                    {
+                        // TODO: Enhance to take care of other platforms
+                        process.append(confPath->get("linux").c_str());
                     }
                     
                     process.append(conf->get("Process").c_str());
@@ -73,7 +85,15 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
                     bsl::shared_ptr<downloader> downloadUtil = bsl::make_shared<downloader>();
                     try
                     {
+                        // Currently downloading at default location
                         downloadUtil->download(conf->get("DownloadURL").c_str(), conf->get("Process"));
+                        process.clear();
+                        ////////////////////////////////////////////
+                        // Can be moved to downloader class
+                        process = std::getenv("HOME");
+                        process.append("/");
+                        process.append(conf->get("Process").c_str());
+                        /////////////////////////////////////////////
                         bsl::shared_ptr<IAction> action = bsl::make_shared<action_process>(process.generic_string(), conf->get("Param").c_str());
                         action->execute();
                         responseVec = action->getResponse();
@@ -98,6 +118,8 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
                     response.append(resp);
                 }
                 return response;
+                // Need to send the queue information along with the result so that we
+                // can send the message back to the right channel and queue.
             }
             
             return bsl::string("Success");
