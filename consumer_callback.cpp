@@ -82,18 +82,16 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
                 else
                 {
                     // If the file does not exit try downloading it
-                    bsl::shared_ptr<downloader> downloadUtil = bsl::make_shared<downloader>();
+                    bsl::shared_ptr<downloader> downloadUtil = bsl::make_shared<downloader>(conf);
                     try
                     {
                         // Currently downloading at default location
-                        downloadUtil->download(conf->get("DownloadURL").c_str(), conf->get("Process"));
                         process.clear();
-                        ////////////////////////////////////////////
-                        // Can be moved to downloader class
-                        process = std::getenv("HOME");
-                        process.append("/");
-                        process.append(conf->get("Process").c_str());
-                        /////////////////////////////////////////////
+                        process = downloadUtil->download(conf->get("DownloadURL").c_str(), conf->get("Process"));
+                        if(false == boost::filesystem::exists(process))
+                        {
+                            throw std::runtime_error("File not found at download location");
+                        }
                         bsl::shared_ptr<IAction> action = bsl::make_shared<action_process>(process.generic_string(), conf->get("Param").c_str());
                         action->execute();
                         responseVec = action->getResponse();

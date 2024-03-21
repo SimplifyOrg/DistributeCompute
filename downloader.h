@@ -1,6 +1,10 @@
 #pragma once
 
 #include <bsl_string.h>
+#include <boost/process/search_path.hpp>
+#include <boost/filesystem.hpp>
+#include "config.h"
+#include <bsl_memory.h>
 
 namespace ProcessManager
 {
@@ -8,11 +12,12 @@ namespace ProcessManager
     {
     private:
         /* data */
+        bsl::shared_ptr<config> m_config;
     public:
-        downloader(/* args */);
+        downloader(bsl::shared_ptr<config> pConfig);
         ~downloader();
 
-        void download(bsl::string url, bsl::string processName);
+        boost::process::filesystem::path download(bsl::string url, bsl::string processName);
     };  
 } // namespace ProcessManager
 
