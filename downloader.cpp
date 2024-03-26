@@ -12,14 +12,17 @@ downloader::~downloader()
 {
 }
 
-boost::process::filesystem::path downloader::download(bsl::string url, bsl::string processName)
+boost::process::filesystem::path downloader::download(bsl::string url)
 {
-    std::ofstream of(processName.c_str(), std::ios::binary);
-    cpr::Response r = cpr::Download(of, cpr::Url{url.c_str()});
-
+    // Download file to default location for now
+    // TODO: Enhance to download at specified location
+    //
     boost::process::filesystem::path process = std::getenv("HOME");
     process.append("/");
     process.append(m_config->get("Process").c_str());
+    
+    std::ofstream of(process.generic_string(), std::ios::binary);
+    cpr::Response r = cpr::Download(of, cpr::Url{url.c_str()});
 
     return process;
 }

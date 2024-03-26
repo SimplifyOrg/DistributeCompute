@@ -17,7 +17,7 @@ namespace ProcessManager
         downloader(bsl::shared_ptr<config> pConfig);
         ~downloader();
 
-        boost::process::filesystem::path download(bsl::string url, bsl::string processName);
+        boost::process::filesystem::path download(bsl::string url);
     };  
 } // namespace ProcessManager
 

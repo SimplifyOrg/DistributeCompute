@@ -12,6 +12,7 @@
 #include "IAction.h"
 #include "action_process.h"
 #include "downloader.h"
+#include "spdlog/spdlog.h"
 
 using namespace BloombergLP;
 using namespace ProcessManager;
@@ -39,6 +40,10 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
             std::cout << "Currrent Thread id: " << std::this_thread::get_id() << std::endl;
             std::cout << "Test data: " << inputData << std::endl;
             std::string data(inputData.c_str());
+            // Sometimes message string does not have
+            // terminating character. Remove all the string 
+            // after last curly braces and add terminating
+            // character
             if(data[data.size()-1] != '}')
             {
                 auto pos = data.find_last_of('}');
@@ -46,8 +51,10 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
             }
             bsl::shared_ptr<config> conf = bsl::make_shared<config>();
             bsl::vector<bsl::string> responseVec;
+            spdlog::info("Before read JSON");
             if(conf->readData(data))
             {
+                spdlog::info("After read JSON");
                 boost::process::filesystem::path process;
                 if(conf->get("PathType") == "full-path")
                 {
@@ -87,7 +94,7 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
                     {
                         // Currently downloading at default location
                         process.clear();
-                        process = downloadUtil->download(conf->get("DownloadURL").c_str(), conf->get("Process"));
+                        process = downloadUtil->download(conf->get("downloadURL").c_str());
                         if(false == boost::filesystem::exists(process))
                         {
                             throw std::runtime_error("File not found at download location");
