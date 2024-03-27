@@ -1,0 +1,5 @@
+repos:
+  - repo: https://github.com/SimplifyOrg/DistributeCompute
+    rev: v4.1.0
+    hooks:
+      - id: no-commit-to-branch
