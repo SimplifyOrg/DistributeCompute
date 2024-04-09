@@ -10,8 +10,8 @@
 
 ## How to add unit tests:
 
-    In unittest/CMakeLists.txt
-        - Add following lines
+In unittest/CMakeLists.txt
+- Add following lines
         
             add_executable(
                 unit_test 
