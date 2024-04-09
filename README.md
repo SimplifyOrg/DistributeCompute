@@ -11,7 +11,7 @@
 ## How to add unit tests:
 
 In unittest/CMakeLists.txt
-- Add following lines
+- Add following lines:
         
             add_executable(
                 unit_test 
@@ -28,3 +28,15 @@ In unittest/CMakeLists.txt
 
             add_test(unit_test unit_test)
 
+- Run unit test as follows:
+
+    ```cmd
+    > $ ctest
+    ```
+
+    For verbose output
+    ```cmd
+    > $ ctest --verbose
+    ```
+
+    Log file will be generated when a test fails. So try to add as many logging information as needed.
