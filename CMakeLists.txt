@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.5.0)
 set(CMAKE_BUILD_TYPE Debug)
-#set(VCPKG_ROOT /home/abs/vcpkg/vcpkg)
 set(VCPKG_TARGET_TRIPLET x64-linux)
 set(CMAKE_TOOLCHAIN_FILE $ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
 include($ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
