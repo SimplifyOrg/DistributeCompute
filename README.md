@@ -10,6 +10,11 @@
 ### Build using VCPKG (Recommended)
 
 - Install VCPKG based on instruction from [offical page](https://github.com/microsoft/vcpkg?tab=readme-ov-file#quick-start-unix).
+- Set VCPKG_ROOT environment variable to point to vcpkg install directory.
+  ``` cmd
+  > $ export VCPKG_ROOT=/path/to/vcpkg_install_dir
+  ```
+  
 - Install below VCPKG package:
   
   Needed for connecting with rabbitMQ. RMQCPP runs it's own event loop when consuming messages.
