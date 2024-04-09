@@ -37,7 +37,7 @@
   > $ git clone https://github.com/SimplifyOrg/DistributeCompute.git
   ```
 
-- Project is currently using [Nlohmann JSON framework](https://github.com/nlohmann/json) from JSON file parsing.
+- Project is currently using [Nlohmann JSON framework](https://github.com/nlohmann/json) for JSON file parsing.
 - Build as using following commands
   
   #### Init Cmake:
