@@ -41,9 +41,13 @@
 - Build as using following commands
   
   #### Init Cmake:
-  
-  > cmake -DCMAKE_BUILD_TYPE=Debug -S /path/to/processManager -B /path/to/processManager/build
+
+  ```cmd
+  > $ cmake -DCMAKE_BUILD_TYPE=Debug -S /path/to/processManager -B /path/to/processManager/build
+  ```
   
   #### Build:
-  
-  > cmake --build /path/to/processManager/build
+
+  ```cmd
+  > $ cmake --build /path/to/processManager/build
+  ```
