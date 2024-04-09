@@ -24,7 +24,7 @@ In unittest/CMakeLists.txt
                 boost_system
                 Boost::filesystem
                 boost_system
-                ...
+                ... # Add other dependencies
             )
 
             add_test(unit_test unit_test)
