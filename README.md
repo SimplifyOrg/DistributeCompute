@@ -23,7 +23,6 @@ In unittest/CMakeLists.txt
                 bsl
                 boost_system
                 Boost::filesystem
-                boost_system
                 ... # Add other dependencies
             )
 

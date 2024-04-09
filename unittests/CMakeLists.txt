@@ -15,7 +15,6 @@ target_link_libraries(test_event_loop PUBLIC
             bsl
             boost_system
             Boost::filesystem
-            boost_system
         )
 
 add_test(test_event_loop test_event_loop)
