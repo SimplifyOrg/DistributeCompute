@@ -3,7 +3,7 @@
 #include <rmqa_producer.h>
 #include <IMessage.h>
 
-ProcessManager::producer::producer(bsl::shared_ptr<connection> pConnection)
+ProcessManager::producer::producer(std::shared_ptr<connection> pConnection)
 {
     m_connection = pConnection;
     m_maxOutstandingConfirms = 10;
