@@ -2,21 +2,20 @@
 
 #include <filesystem>
 #include <memory>
-#include <bsl_string.h>
+#include <string>
 #include "json.hpp"
 
 using namespace nlohmann;
-using namespace BloombergLP;
 
-class config
+class json_nlohmann_adapter
 {
 private:
     /* data */
     std::unique_ptr<json> m_configObject;
 public:
-    config(/* args */);
-    ~config();
+    json_nlohmann_adapter(/* args */);
+    ~json_nlohmann_adapter();
     bool readConfigFile(const std::filesystem::path &configPath);
-    bool readData(const bsl::string& data);
-    bsl::string get(const bsl::string &key);
+    bool readData(const std::string& data);
+    std::string get(const std::string &key);
 };

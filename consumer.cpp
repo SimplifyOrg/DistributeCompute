@@ -1,5 +1,5 @@
-#include "consumer.h"
-#include "consumer_callback.h"
+#include <consumer.h>
+#include <consumer_callback.h>
 #include <bdlpcre_regex.h>
 
 using namespace ProcessManager;
@@ -22,7 +22,7 @@ static bool validateName(const bsl::string& exchangeName)
            0 == regex.match(exchangeName.c_str(), exchangeName.length());
 }
 
-consumer::consumer(bsl::shared_ptr<connection> pConnection)
+consumer::consumer(std::shared_ptr<connection> pConnection)
 {
     m_connection = pConnection;
 }
@@ -32,7 +32,7 @@ consumer::~consumer()
 }
 
 bool consumer::createConsumer()
-{    
+{
     auto config = m_connection->getConfig();
     if(!validateName(config->get("ExchangeName")))
     {
@@ -43,7 +43,7 @@ bool consumer::createConsumer()
     rmqt::QueueHandle q1    = topology.addPassiveQueue(config->get("QueueName"));
     rmqt::ExchangeHandle e1 = topology.addPassiveExchange(config->get("ExchangeName"));
     //topology.bind(e1, q1, config->get("RoutingKey"));
-    
+
     auto vhost = m_connection->getVhost();
     rmqt::Result<rmqa::Consumer> consumerResult =
                                     vhost->createConsumer(
@@ -53,14 +53,14 @@ bool consumer::createConsumer()
                                         "testConnection-consumer", // Consumer Label (shows in Management UI)
                                         20                  // prefetch count
                                     );
-    
-    if (!consumerResult) 
+
+    if (!consumerResult)
     {
         // An argument passed to the consumer was bad, retrying will have no effect
         std::cerr << "An argument passed to the consumer was bad, retrying will have no effect"<< std::endl;
         return false;
     }
-    
+
     m_consumer = consumerResult.value();
     return true;
 }

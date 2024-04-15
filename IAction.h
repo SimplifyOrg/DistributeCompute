@@ -1,9 +1,7 @@
 #pragma once
 
-#include <bsl_string.h>
-#include <bsl_vector.h>
-
-using namespace BloombergLP;
+#include <string>
+#include <vector>
 
 namespace ProcessManager
 {
@@ -11,7 +9,7 @@ namespace ProcessManager
     {
     public:
         virtual void execute() = 0;
-        virtual bsl::vector<bsl::string> getResponse() = 0;
+        virtual std::vector<std::string> getResponse() = 0;
     };
 } // namespace ProcessManager
 

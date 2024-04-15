@@ -1,7 +1,7 @@
-#include "producer.h"
+#include <producer.h>
 #include <rmqa_topology.h>
 #include <rmqa_producer.h>
-#include "config.h"
+#include <IMessage.h>
 
 ProcessManager::producer::producer(bsl::shared_ptr<connection> pConnection)
 {
@@ -16,18 +16,18 @@ ProcessManager::producer::~producer()
 bool ProcessManager::producer::createProducer()
 {
     auto config = m_connection->getConfig();
-    
+
     // Create topology to be declared on every reconnection
     rmqa::Topology topology;
     rmqt::QueueHandle q1    = topology.addQueue(config->get("QueueName"));
     rmqt::ExchangeHandle e1 = topology.addExchange(config->get("ExchangeName"));
-    
+
     auto vhost = m_connection->getVhost();
 
     try
     {
         auto producerResult = vhost->createProducer(topology, e1, m_maxOutstandingConfirms);
-        if (!producerResult) 
+        if (!producerResult)
         {
             // handle errors.
             std::cerr << "Error creating connection: " << producerResult.error() << std::endl;
@@ -40,13 +40,13 @@ bool ProcessManager::producer::createProducer()
         std::cerr << e.what() << '\n';
         return false;
     }
-    
+
     return true;
 }
 
-void ProcessManager::producer::sendMessage(bsl::string & message, 
-                                        void(*brokerAckCallback)(const rmqt::Message& message, 
-                                                                const bsl::string& routingKey, 
+void ProcessManager::producer::sendMessage(bsl::string & message,
+                                        void(*brokerAckCallback)(const rmqt::Message& message,
+                                                                const bsl::string& routingKey,
                                                                 const rmqt::ConfirmResponse& response))
 {
     auto config = m_connection->getConfig();
@@ -55,7 +55,7 @@ void ProcessManager::producer::sendMessage(bsl::string & message,
     {
         std::cerr << "Routing key not found" << '\n';
     }
-    
+
     if(!message.empty())
     {
         rmqt::Message messageToSend(

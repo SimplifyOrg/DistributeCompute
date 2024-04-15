@@ -6,11 +6,10 @@ enable_testing()
 list(APPEND CMAKE_CTEST_ARGUMENTS "--output-on-failure")
 
 add_executable(
-            test_event_loop  
+            test_event_loop
             test_event_loop.cpp
             )
-
-target_link_libraries(test_event_loop PUBLIC 
+target_link_libraries(test_event_loop PUBLIC
             process
             bsl
             boost_system

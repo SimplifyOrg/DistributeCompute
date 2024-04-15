@@ -16,7 +16,6 @@ find_package(cpr REQUIRED)
 
 add_library(process
         downloader.cpp
-        config.cpp
         consumer_callback.cpp
         connection.cpp
         producer.cpp
@@ -26,9 +25,12 @@ add_library(process
         event_loop.cpp
         )
 
+add_subdirectory(JsonReader)
+add_subdirectory(FileHandler)
+
 add_executable(DistributeCompute main.cpp)
 
-target_link_libraries(process PUBLIC 
+target_link_libraries(process PUBLIC
     rmqcpp::rmq
     bsl
     boost_system
@@ -36,8 +38,14 @@ target_link_libraries(process PUBLIC
     spdlog::spdlog
     cpr::cpr
     )
+target_include_directories(process PUBLIC
+                        "/"
+                        ${CMAKE_CURRENT_SOURCE_DIR}/JsonReader
+                        ${CMAKE_CURRENT_SOURCE_DIR}/FileHandler
+                        )
 add_subdirectory(unittests)
-target_link_libraries(DistributeCompute PUBLIC 
+
+target_link_libraries(DistributeCompute PUBLIC
         process
     )
 

@@ -9,12 +9,12 @@ namespace ProcessManager
     {
     private:
         std::filesystem::path m_localProcessPath;
-        bsl::string m_commandLineParams;
-        bsl::vector<bsl::string> m_response;
+        std::string m_commandLineParams;
+        std::vector<std::string> m_response;
     public:
         virtual void execute();
-        virtual bsl::vector<bsl::string> getResponse() { return m_response; }
-        action_process(std::filesystem::path localPath, bsl::string cmdLine) : 
+        virtual std::vector<std::string> getResponse() { return m_response; }
+        action_process(std::filesystem::path localPath, std::string cmdLine) :
             m_localProcessPath(localPath),
             m_commandLineParams(cmdLine)
         {}

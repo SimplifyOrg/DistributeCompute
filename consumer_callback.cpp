@@ -1,18 +1,20 @@
-#include "consumer_callback.h"
-#include "event_loop.h"
-#include "uuid_generator.h"
+#include <consumer_callback.h>
+#include <event_loop.h>
+#include <uuid_generator.h>
 #include <thread>
 #include <bsl_string.h>
 #include <bsl_memory.h>
 #include <string>
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
 #include <boost/process/search_path.hpp>
 #include <boost/filesystem.hpp>
-#include "config.h"
-#include "IAction.h"
-#include "action_process.h"
-#include "downloader.h"
-#include "spdlog/spdlog.h"
+#include <IMessage.h>
+#include <json_message_impl.h>
+#include <IAction.h>
+#include <action_process.h>
+#include <downloader.h>
+#include <vector>
+#include <string>
 
 using namespace BloombergLP;
 using namespace ProcessManager;
@@ -41,7 +43,7 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
             std::cout << "Test data: " << inputData << std::endl;
             std::string data(inputData.c_str());
             // Sometimes message string does not have
-            // terminating character. Remove all the string 
+            // terminating character. Remove all the string
             // after last curly braces and add terminating
             // character
             if(data[data.size()-1] != '}')
@@ -49,20 +51,20 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
                 auto pos = data.find_last_of('}');
                 data.erase(data.begin()+pos+1, data.end());
             }
-            bsl::shared_ptr<config> conf = bsl::make_shared<config>();
-            bsl::vector<bsl::string> responseVec;
+            std::shared_ptr<IMessage> conf = std::make_shared<json_message_impl>();
+            std::vector<std::string> responseVec;
             spdlog::info("Before read JSON");
-            if(conf->readData(data))
+            if(conf->parse(data))
             {
                 spdlog::info("After read JSON");
                 boost::process::filesystem::path process;
                 if(conf->get("PathType") == "full-path")
                 {
-                    bsl::shared_ptr<config> confPath = bsl::make_shared<config>();
-                    if(!confPath->readData(conf->get("downloadLocation")))
+                    std::shared_ptr<IMessage> confPath = std::make_shared<json_message_impl>();
+                    if(!confPath->parse(conf->get("downloadLocation")))
                     {
                         // Download to a default location in case
-                        // download location is not provided or 
+                        // download location is not provided or
                         // improperly formatted
                         process.append("/home/");
                     }
@@ -71,7 +73,7 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
                         // TODO: Enhance to take care of other platforms
                         process.append(confPath->get("linux").c_str());
                     }
-                    
+
                     process.append(conf->get("Process").c_str());
                 }
                 else
@@ -79,17 +81,17 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
                     // Search in $PATH locations
                     process = boost::process::search_path(conf->get("Process").c_str());
                 }
-                
+
                 if(boost::filesystem::exists(process))
                 {
-                    bsl::shared_ptr<IAction> action = bsl::make_shared<action_process>(process.generic_string(), conf->get("Param").c_str());
+                    std::shared_ptr<IAction> action = std::make_shared<action_process>(process.generic_string(), conf->get("Param").c_str());
                     action->execute();
                     responseVec = action->getResponse();
                 }
                 else
                 {
                     // If the file does not exit try downloading it
-                    bsl::shared_ptr<downloader> downloadUtil = bsl::make_shared<downloader>(conf);
+                    std::shared_ptr<downloader> downloadUtil = std::make_shared<downloader>(conf);
                     try
                     {
                         // Currently downloading at default location
@@ -99,7 +101,7 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
                         {
                             throw std::runtime_error("File not found at download location");
                         }
-                        bsl::shared_ptr<IAction> action = bsl::make_shared<action_process>(process.generic_string(), conf->get("Param").c_str());
+                        std::shared_ptr<IAction> action = std::make_shared<action_process>(process.generic_string(), conf->get("Param").c_str());
                         action->execute();
                         responseVec = action->getResponse();
                     }
@@ -126,7 +128,7 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
                 // Need to send the queue information along with the result so that we
                 // can send the message back to the right channel and queue.
             }
-            
+
             return bsl::string("Success");
         })
         .dispatch(ev);
@@ -135,11 +137,11 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
 
 void MessageConsumer::operator()(rmqp::MessageGuard& messageGuard)
 {
-    if (processMessage(messageGuard.message())) 
+    if (processMessage(messageGuard.message()))
     {
         messageGuard.ack();
     }
-    else 
+    else
     {
         messageGuard.nack();
         // Would automatically nack if it goes out of scope

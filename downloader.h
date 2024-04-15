@@ -3,8 +3,8 @@
 #include <bsl_string.h>
 #include <boost/process/search_path.hpp>
 #include <boost/filesystem.hpp>
-#include "config.h"
-#include <bsl_memory.h>
+#include <IMessage.h>
+#include <memory>
 
 namespace ProcessManager
 {
@@ -12,12 +12,12 @@ namespace ProcessManager
     {
     private:
         /* data */
-        bsl::shared_ptr<config> m_config;
+        std::shared_ptr<IMessage> m_config;
     public:
-        downloader(bsl::shared_ptr<config> pConfig);
+        downloader(std::shared_ptr<IMessage> pConfig);
         ~downloader();
 
-        boost::process::filesystem::path download(bsl::string url);
-    };  
+        boost::process::filesystem::path download(std::string url);
+    };
 } // namespace ProcessManager
 
