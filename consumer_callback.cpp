@@ -49,6 +49,7 @@ bool MessageConsumer::processMessage(const rmqt::Message& message)
                 auto pos = data.find_last_of('}');
                 data.erase(data.begin()+pos+1, data.end());
             }
+            
             bsl::shared_ptr<config> conf = bsl::make_shared<config>();
             bsl::vector<bsl::string> responseVec;
             spdlog::info("Before read JSON");
